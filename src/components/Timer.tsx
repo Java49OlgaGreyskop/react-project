@@ -9,7 +9,7 @@ export const Timer: React.FC<TimerProps> = (props) => {
     const timeZoneIndex: number =
      timeZones.findIndex(tz => JSON.stringify(tz).includes(props.cityOrCountry));
     const [timeZone, setTimeZone] = React.useState(timeZones[timeZoneIndex]?.name);
-    const [timeZoneName, setTimeZoneName] = React.useState(timeZone ?
+    const timeZoneName = React.useRef(timeZone ?
          props.cityOrCountry : "Israel");
     const [time, setTime] = React.useState(new Date());
     function tick() {
@@ -27,7 +27,7 @@ export const Timer: React.FC<TimerProps> = (props) => {
         if (index < 0) {
             res = `${value} is wrong city / country, please type again`;
         } else {
-            setTimeZoneName(value);
+            timeZoneName.current = value;
             setTimeZone(timeZones[index].name);
         }
         return res;
@@ -35,7 +35,7 @@ export const Timer: React.FC<TimerProps> = (props) => {
 
     return <div>
         <Input placeHolder={"Enter city or country"} inputProcess={processCityCountry}/>
-        <h3 className='logo'>Time in {timeZoneName}</h3>
+        <h3 className='logo'>Time in {timeZoneName.current}</h3>
         <label style={{display: "block",
          textAlign: "center", fontSize: "2em"}}>
             {time.toLocaleTimeString(undefined,{timeZone})}</label>
