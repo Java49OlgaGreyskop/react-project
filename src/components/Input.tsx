@@ -26,7 +26,7 @@ export const Input: React.FC<InputProps> = ({placeHolder, inputProcess}) => {
        inputElement = document.getElementById(inputId) as HTMLInputElement;
     })
     return <div>
-        <input id={inputId} placeholder={placeHolder}/>
+        <input id={inputId} placeholder={placeHolder} style={{width: "60vw"}}/>
         <button onClick={processGo}>GO</button>
         {message && <Alert type={"error"} message={message}/>}
     </div>
