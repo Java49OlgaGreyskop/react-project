@@ -1,30 +1,40 @@
 import React from 'react';
+import { Input } from './components/Input';
 import { Timer } from './components/Timer';
 
 
 function App() {
-  const [time, setTime] = React.useState(new Date());
   const flexColumn: React.CSSProperties = { display: "flex", flexDirection: "column" }
   const flexRow: React.CSSProperties = { display: "flex", flexDirection: "row" , 
   justifyContent: "space-around", width: "50vw", marginTop: "4vh"}
-  function tick() {
-    console.log("tick");
-    setTime(new Date());
-}
-React.useEffect(()=>{
-    const interval = setInterval(tick, 1000);
-    return ()=>clearInterval(interval);
-}, [])
+  const [cityCountries, setCityCountries] = React.useState<string[]>([]);
+  function inputProcessFun(value: string): string {
+    const cityCountriesFromInput: string[] = value.split("#");
+    let res:string = '';
+    if(cityCountriesFromInput.length % 2 != 0) {
+      res = "There should be even number of the country/cities"
+    } else {
+        setCityCountries(cityCountriesFromInput.slice());
+    }
+    return res;
+  }
+  function getTimers(): JSX.Element[] {
+    const res: JSX.Element[] = [];
+    for(let i = 0; i < cityCountries.length; i+=2) {
+      res.push(<div style={flexRow}>
+        <Timer cityOrCountry={cityCountries[i]} />
+        <Timer cityOrCountry={cityCountries[i + 1]} />
+      </div>)
+    }
+
+    return res;
+  }
 
   return <div style={flexColumn}>
-    <div style={flexRow}>
-      <Timer cityOrCountry="London" time ={time}></Timer>
-      <Timer cityOrCountry="Paris" time ={time}></Timer>
-    </div>
-    <div style={flexRow}>
-      <Timer cityOrCountry="India" time ={time}></Timer>
-      <Timer cityOrCountry="Cuba" time ={time}></Timer>
-    </div>
+    <Input placeHolder={'enter city/countries separated by #'}
+     inputProcess={inputProcessFun}/>
+     {getTimers()}
+    
 
   </div>
 
