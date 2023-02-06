@@ -1,18 +1,39 @@
 import React from 'react';
-import {  getRandomMatrix, getRandomNumber, getRandomArrayElement, getRandomDate,  } from './components/utils/random';
 
-
+import './App.css'
+import { CounterMultiply } from './components/CounterMultiply';
+import { CounterSquare } from './components/CounterSquare';
+import { CounterUpdater } from './components/CounterUpdater';
+import { Login } from './components/Login';
+import { Logout } from './components/Logout';
+import {useSelector} from 'react-redux';
+import { Input } from './components/Input';
 function App() {
-  
-console.log (getRandomNumber(1,6,false, true))
-console.log (getRandomMatrix(10,5,1,10))
-console.log(getRandomArrayElement([1,2,3,5,1000, "abc","cccCAGe"]))
-console.log(getRandomDate(1990,2005))
- 
- return <div >
-    
+  const auth: boolean = useSelector<any, boolean>(state => state.auth.authenticated);
+  const [operand, setOperand] = React.useState(1);
+  const [factor, setFactor] = React.useState(10);
+  return <div>
+    {auth && <div>
+        <Input placeHolder={'Enter operand'} inputProcess={function (value: string):
+         string {
+        setOperand(+value);
+        return '';
+      } }></Input>
+        <Input placeHolder={'Enter factor'} inputProcess={function (value: string):
+         string {
+        setFactor(+value);
+        return '';
+      } }></Input>
+      </div>}
+    {auth && <div>
+    <CounterUpdater operand={operand}></CounterUpdater>
+    <CounterSquare></CounterSquare>
+    <CounterMultiply factor={factor}></CounterMultiply>
+  </div>}
+  {auth && <Logout></Logout>}
+  {!auth && <Login></Login>}
   </div>
 
 }
-
 export default App;
+
